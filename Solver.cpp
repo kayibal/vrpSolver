@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 using namespace std;
 
 std::string trim(std::string& s)
@@ -126,6 +127,45 @@ void Solver::visitNeighbor(){
     }else {
         current.partialReverse(a, b);
     }
+}
+
+// SOURCE: https://en.wikipedia.org/wiki/Simulated_annealing
+void Solver::start()
+{
+    best = Solution();
+    current = best;
+    float temp = 20.0f;
+    do
+    {
+        int trials=0;
+        int changes=0;
+        do
+        {
+            Solution n = visitNeighbor();
+            if(n.isFeasible())
+            {
+                float energy_delta = n.evaluate()-current.evaluate();
+                if(energy_delta<0.0)
+                {
+                    changes++;
+                    current = n;
+                    if(current.evaluate()<best.evaluate())
+                    {
+                        best=current;
+                    }
+                }
+                else
+                {
+                    if(exp(-energy_delta/temp)>(double(rand())/RAND_MAX))
+                    {
+                        changes++;
+                        current = n;
+                    }
+                }
+            }
+        }while(trials>=size_factor || changes >= cutoff);
+        temp = temp * temp_factor;
+    }while(temp<=(temp_init/find_divisor));
 }
 
 
