@@ -7,12 +7,14 @@
 //
 
 #include <iostream>
+#include "Solver.h"
+using namespace std;
 
 int main(int argc, const char * argv[])
 {
 
     // insert code here...
-    std::cout << "Hello, World!\n";
+    Solver s(8132947,0,0,"../Christofides_1.vrp");
     return 0;
 }
 
