@@ -21,16 +21,21 @@ typedef struct {
 } node;
 
 class Solution{
-    std::vector<int> route_start;
     std::vector<node*> routes;
+    int value;
+    
+public:
+    /*
+     Constructor assumes that first node in array is depot
+     */
+    Solution(std::vector<node*> nodes);
+    Solution(Solution& s);
+    
     void one2one(int a, int b);
     void deleteInsert(int a, int b);
     void partialReverse(int a, int b);
-public:
-    Solution();
-    int getCount();
-    int getDistance(int r);
-    int getCompleteDistance();
+    
+    int evaluate();
 };
 
 #endif /* defined(__vrpSolver__Solution__) */
