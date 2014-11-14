@@ -10,5 +10,27 @@
 #define __vrpSolver__Solution__
 
 #include <iostream>
+#include <vector>
+
+typedef struct {
+    int node_id;
+    int time;
+    int demand;
+    double x;
+    double y;
+} node;
+
+class Solution{
+    std::vector<int> route_start;
+    std::vector<node*> routes;
+    void one2one(int a, int b);
+    void deleteInsert(int a, int b);
+    void partialReverse(int a, int b);
+public:
+    Solution();
+    int getCount();
+    int getDistance(int r);
+    int getCompleteDistance();
+};
 
 #endif /* defined(__vrpSolver__Solution__) */
