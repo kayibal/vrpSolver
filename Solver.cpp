@@ -25,7 +25,7 @@ std::string trim(std::string& s)
     return s;
 }
 
-Solver::Solver(int s, int max_t, int c, std::string file)
+Solver::Solver(int s, int max_t, std::string file)
 {
     srand(s);
     max_time = max_t;

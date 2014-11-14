@@ -22,7 +22,7 @@ class Solver{
     
     void visitNeighbor();
 public:
-    Solver(int s, int max_t, int c, std::string file);
+    Solver(int s, int max_t, std::string file);
     void start();
     float calcHeat();
 };
