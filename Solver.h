@@ -20,7 +20,8 @@ class Solver{
     Solution best;
     Solution current;
     
-    void visitNeighbor();
+    Solution visitNeighbor();
+    
 public:
     Solver(int s, int max_t, std::string file);
     void start();

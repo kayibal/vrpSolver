@@ -58,10 +58,29 @@ int Solution::getSize(){
     return routes.size();
 }
 
+//returns total time
 int Solution::evaluate(){
     value = 0;
     for (int i = 0; i < routes.size(); i++){
         value += sqrt(pow((routes[i]->x * routes[i+1]->x),2) + pow((routes[i]->y - routes[i+1]->y),2))+routes[i]->time;
     }
     return value;
+}
+
+bool Solution::isFeasable(int max_time, int capacity){
+    int time = 0;
+    int demand = 0;
+    for (int i = 0; i< routes.size()-1; i++){
+        time += sqrt(pow((routes[i]->x * routes[i+1]->x),2) + pow((routes[i]->y - routes[i+1]->y),2))+routes[i]->time;
+        demand += routes[i]->demand;
+        //each route must be smaller than max_time
+        if(time > max_time){
+            return false;
+        }
+        //each routes demand must be smaller than C
+        if(demand > capacity){
+            return false;
+        }
+    }
+    return true;
 }
