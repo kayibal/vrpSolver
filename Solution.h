@@ -30,6 +30,7 @@ public:
      */
     Solution(std::vector<node*> nodes);
     Solution(Solution& s);
+    Solution();
     
     void one2one(int a, int b);
     void deleteInsert(int a, int b);

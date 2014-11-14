@@ -10,6 +10,7 @@
 #include <math.h>
 
 Solution::Solution(std::vector<node*> nodes){
+    value = 0;
     node* depot = nodes[0];
     routes.resize(nodes.size()*2);
     for (int i = 1; i < nodes.size()-1; i++){
@@ -19,7 +20,12 @@ Solution::Solution(std::vector<node*> nodes){
 }
 
 Solution::Solution(Solution& s){
+    value = 0;
     routes = s.routes;
+}
+
+Solution::Solution(){
+    value = 0;
 }
 
 void Solution::one2one(int a, int b){
