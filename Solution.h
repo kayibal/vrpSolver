@@ -28,7 +28,7 @@ public:
     /*
      Constructor assumes that first node in array is depot
      */
-    Solution(std::vector<node*> nodes);
+    Solution(std::vector<node*>& nodes);
     Solution(Solution& s);
     Solution();
     
@@ -37,6 +37,7 @@ public:
     void partialReverse(int a, int b);
     
     int evaluate();
+    int getSize();
 };
 
 #endif /* defined(__vrpSolver__Solution__) */

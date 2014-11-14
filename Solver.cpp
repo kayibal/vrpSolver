@@ -115,4 +115,17 @@ Solver::Solver(int s, int max_t, std::string file)
     }
 }
 
+void Solver::visitNeighbor(){
+    int x = rand() % 3;
+    int a = rand() % current.getSize();
+    int b = rand() % current.getSize();
+    if(x <= 1){
+        current.one2one(a,b);
+    }else if(x <= 2){
+        current.deleteInsert(a, b);
+    }else {
+        current.partialReverse(a, b);
+    }
+}
+
 

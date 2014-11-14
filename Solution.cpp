@@ -9,7 +9,7 @@
 #include "Solution.h"
 #include <math.h>
 
-Solution::Solution(std::vector<node*> nodes){
+Solution::Solution(std::vector<node*>& nodes){
     value = 0;
     node* depot = nodes[0];
     routes.resize(nodes.size()*2);
@@ -52,6 +52,10 @@ void Solution::partialReverse(int a, int b){
         routes[a+i] = routes[b-i];
         routes[b-i] = temp;
     }
+}
+
+int Solution::getSize(){
+    return routes.size();
 }
 
 int Solution::evaluate(){
