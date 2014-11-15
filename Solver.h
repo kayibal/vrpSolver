@@ -32,7 +32,7 @@ class Solver{
     Solution visitNeighbor();
     
 public:
-    Solver(int s, int max_t, std::string file);
+    Solver(int s, std::string file);
     void start();
     void printSolution();
 };

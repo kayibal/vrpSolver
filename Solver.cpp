@@ -12,6 +12,7 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#include <climits>
 using namespace std;
 
 std::string trim(std::string& s)
@@ -26,10 +27,10 @@ std::string trim(std::string& s)
     return s;
 }
 
-Solver::Solver(int s, int max_t, std::string file)
+Solver::Solver(int s, std::string file)
 {
     srand(s);
-    max_time = max_t;
+    max_time = INT_MAX;
     int num_nodes=0;
     
     //standard values for SA
@@ -70,6 +71,10 @@ Solver::Solver(int s, int max_t, std::string file)
         {
             //Set Capacity;
             capacity = stod(varValue);
+        }
+        else if(varName=="SERVICE_TIME")
+        {
+            max_time = stoi(varValue);
         }
         else if(varName=="VEHICLES")
         {
