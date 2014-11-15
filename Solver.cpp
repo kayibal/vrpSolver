@@ -32,6 +32,7 @@ Solver::Solver(int s, std::string file)
     srand(s);
     max_time = INT_MAX;
     int num_nodes=0;
+    int service_time=0;
     
     //standard values for SA
     temp_init = 1000;
@@ -67,6 +68,10 @@ Solver::Solver(int s, std::string file)
             nodes.resize(num_nodes);
             nodes[0]=NULL;
         }
+        else if(varName=="DISTANCE")
+        {
+            max_time = stoi(varValue);
+        }
         else if(varName=="CAPACITY")
         {
             //Set Capacity;
@@ -74,7 +79,7 @@ Solver::Solver(int s, std::string file)
         }
         else if(varName=="SERVICE_TIME")
         {
-            max_time = stoi(varValue);
+            service_time = stoi(varValue);
         }
         else if(varName=="VEHICLES")
         {
@@ -93,7 +98,7 @@ Solver::Solver(int s, std::string file)
                 f>>id>>x>>y;
 
                 n->node_id=i+1;
-                n->time=0;
+                n->time=service_time;
                 n->x=x;
                 n->y=y;
                 nodes[id]=n;
