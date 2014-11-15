@@ -31,7 +31,14 @@ Solver::Solver(int s, int max_t, std::string file)
     srand(s);
     max_time = max_t;
     int num_nodes=0;
-
+    
+    //standard values for SA
+    temp_init = 1000;
+    temp_factor = 0.99;
+    cutoff = 0.5;
+    size_factor = 10;
+    find_divisor = 10000;
+    
     //Read .vrs file
     ifstream f(file.c_str());
     while(!f.eof())
@@ -114,6 +121,8 @@ Solver::Solver(int s, int max_t, std::string file)
             cout<<"DEPOTTTTTT"<<endl;
         }
     }
+    
+    neighborhood_size = 2*pow(nodes.size(),2);
 }
 
 Solution Solver::visitNeighbor(){
@@ -135,18 +144,21 @@ Solution Solver::visitNeighbor(){
 // SOURCE: https://en.wikipedia.org/wiki/Simulated_annealing
 void Solver::start()
 {
-    best = Solution();
+    best = Solution(nodes);
     current = best;
-    float temp = 20.0f;
+    float temp = temp_init;
     do
     {
         int trials=0;
         int changes=0;
         do
         {
-            Solution n = visitNeighbor();
-            if(n.isFeasible())
+            trials++;
+            Solution n;
+            n = visitNeighbor();
+            if(n.isFeasable(max_time,capacity))
             {
+                //cout << "found feasible solution, trials: " << trials << "\n";
                 float energy_delta = n.evaluate()-current.evaluate();
                 if(energy_delta<0.0)
                 {
@@ -166,10 +178,14 @@ void Solver::start()
                     }
                 }
             }
-        }while(trials>=size_factor || changes >= cutoff);
+        }while(trials<size_factor*neighborhood_size && changes < cutoff*neighborhood_size);
         temp = temp * temp_factor;
-    }while(temp<=(temp_init/find_divisor));
+        cout << temp << "\n";
+    }while(temp>(temp_init/find_divisor));
+    printSolution();
 }
 
-
+void Solver::printSolution(){
+    best.print();
+}
 

@@ -18,9 +18,10 @@ class Solver{
     //Johnson et al 89-91 p141
     float temp_init;
     float temp_factor;
-    int cutoff;
+    float cutoff;
     int size_factor;
     int find_divisor;
+    int neighborhood_size;
 
     int max_time;
     /*std::vector<int>*/ int capacity;
@@ -33,8 +34,7 @@ class Solver{
 public:
     Solver(int s, int max_t, std::string file);
     void start();
-    float calcHeat();
-    float calcEnergy();
+    void printSolution();
 };
 
 #endif /* defined(__vrpSolver__Solver__) */

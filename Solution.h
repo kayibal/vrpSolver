@@ -39,6 +39,8 @@ public:
     int evaluate();
     int getSize();
     bool isFeasable(int max_time, int capacity);
+    
+    void print();
 };
 
 #endif /* defined(__vrpSolver__Solution__) */

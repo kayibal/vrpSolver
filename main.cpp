@@ -8,13 +8,15 @@
 
 #include <iostream>
 #include "Solver.h"
+#include <climits>
 using namespace std;
 
 int main(int argc, const char * argv[])
 {
 
     // insert code here...
-    Solver s(8132947,0,0,"../Christofides_1.vrp");
+    Solver s(8132947,INT_MAX,"/Users/Alan/Downloads/instances/Christofides_1.vrp");
+    s.start();
     return 0;
 }
 

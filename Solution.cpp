@@ -12,10 +12,11 @@
 Solution::Solution(std::vector<node*>& nodes){
     value = 0;
     node* depot = nodes[0];
-    routes.resize(nodes.size()*2);
-    for (int i = 1; i < nodes.size()-1; i++){
-        routes[i] = depot;
-        routes[i+1] = nodes[i];
+    routes.resize((nodes.size()-1)*2);
+    
+    for (int i = 0; i < nodes.size()-1; i++){
+        routes[2*i] = depot;
+        routes[2*i+1] = nodes[i+1];
     }
 }
 
@@ -61,8 +62,10 @@ int Solution::getSize(){
 //returns total time
 int Solution::evaluate(){
     value = 0;
+    int next;
     for (int i = 0; i < routes.size(); i++){
-        value += sqrt(pow((routes[i]->x * routes[i+1]->x),2) + pow((routes[i]->y - routes[i+1]->y),2))+routes[i]->time;
+        next = (i+1)%(routes.size()); // wraps arround at the end
+        value += sqrt(pow((routes[i]->x * routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
     }
     return value;
 }
@@ -70,8 +73,12 @@ int Solution::evaluate(){
 bool Solution::isFeasable(int max_time, int capacity){
     int time = 0;
     int demand = 0;
-    for (int i = 0; i< routes.size()-1; i++){
-        time += sqrt(pow((routes[i]->x * routes[i+1]->x),2) + pow((routes[i]->y - routes[i+1]->y),2))+routes[i]->time;
+    int next;
+    for (int i = 0; i< routes.size(); i++){
+        next = (i+1)%(routes.size()); // wraps arround at the end
+        
+        time += sqrt(pow((routes[i]->x * routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
+        
         demand += routes[i]->demand;
         //each route must be smaller than max_time
         if(time > max_time){
@@ -81,6 +88,16 @@ bool Solution::isFeasable(int max_time, int capacity){
         if(demand > capacity){
             return false;
         }
+        if (routes[i]->node_id == 0){
+            time = 0;
+            demand = 0;
+        }
     }
     return true;
+}
+void Solution::print(){
+    std::cout << value << "\n";
+    for(int i = 0; i<routes.size(); i++){
+        std::cout << routes[i]->node_id << " ";
+    }
 }
