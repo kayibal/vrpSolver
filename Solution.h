@@ -37,7 +37,7 @@ public:
     void deleteInsert(int a, int b);
     void partialReverse(int a, int b);
     
-    int evaluate();
+    float evaluate();
     int getSize();
     bool isFeasable(int max_time, int capacity);
     

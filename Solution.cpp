@@ -72,7 +72,7 @@ int Solution::getSize(){
 }
 
 //returns total time
-int Solution::evaluate(){
+float Solution::evaluate(){
     value = 0;
     int next;
     for (int i = 0; i < routes.size(); i++){
