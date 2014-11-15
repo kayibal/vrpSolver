@@ -35,11 +35,11 @@ Solver::Solver(int s, std::string file)
     int service_time=0;
     
     //standard values for SA
-    temp_init = 1000;
+    temp_init = 20;
     temp_factor = 0.99;
-    cutoff = 0.5;
-    size_factor = 10;
-    find_divisor = 10000;
+    cutoff = 0.2;
+    size_factor = 4;
+    find_divisor = 50;
     
     //Read .vrs file
     ifstream f(file.c_str());
@@ -87,7 +87,7 @@ Solver::Solver(int s, std::string file)
         }
         else if(varName=="NODE_COORD_SECTION")
         {
-            cout<<"COOOOOOOORDS"<<endl;
+            //cout<<"COOOOOOOORDS"<<endl;
             //Set Nodes
             for(int i=0;i<num_nodes-1;i++)
             {
@@ -114,7 +114,7 @@ Solver::Solver(int s, std::string file)
                 f>>id>>d;
                 nodes[id]->demand=d;
             }
-            cout<<"DEMANDDDDDDD"<<endl;
+            //cout<<"DEMANDDDDDDD"<<endl;
         }
         else if(varName=="DEPOT_SECTION")
         {
@@ -128,7 +128,7 @@ Solver::Solver(int s, std::string file)
             depot->y=y;
             depot->demand=0;
             nodes[0]=depot;
-            cout<<"DEPOTTTTTT"<<endl;
+            //cout<<"DEPOTTTTTT"<<endl;
         }
     }
     
@@ -157,6 +157,7 @@ void Solver::start()
     best = Solution(nodes);
     current = best;
     float temp = temp_init;
+    cout << "waiting for cooldown... \n";
     do
     {
         int trials=0;
@@ -177,6 +178,7 @@ void Solver::start()
                     if(current.evaluate()<best.evaluate())
                     {
                         best=current;
+                        //cout << " better solution found\n";
                     }
                 }
                 else
@@ -190,8 +192,9 @@ void Solver::start()
             }
         }while(trials<size_factor*neighborhood_size && changes < cutoff*neighborhood_size);
         temp = temp * temp_factor;
-        cout << temp << "\n";
+        //cout << temp << "\n";
     }while(temp>(temp_init/find_divisor));
+    cout << "Cold enough u can touch it! \n";
     printSolution();
 }
 

@@ -22,9 +22,10 @@ typedef struct {
 
 class Solution{
     std::vector<node*> routes;
-    int value;
+    float value;
     
 public:
+    bool debug;
     /*
      Constructor assumes that first node in array is depot
      */

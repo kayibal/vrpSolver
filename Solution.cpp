@@ -13,6 +13,7 @@ Solution::Solution(std::vector<node*>& nodes){
     value = 0;
     node* depot = nodes[0];
     routes.resize((nodes.size()-1)*2);
+    debug = false;
     
     for (int i = 0; i < nodes.size()-1; i++){
         routes[2*i] = depot;
@@ -22,26 +23,37 @@ Solution::Solution(std::vector<node*>& nodes){
 
 Solution::Solution(Solution& s){
     value = 0;
+    debug = false;
     routes = s.routes;
 }
 
 Solution::Solution(){
     value = 0;
+    debug = false;
 }
 
 void Solution::one2one(int a, int b){
+    if(a == 0 || b == 0){
+        return;
+    }
     node* temp = routes[a];
     routes[a] = routes[b];
     routes[b] = temp;
 }
 
 void Solution::deleteInsert(int a, int b){
+    if(a == 0 || b == 0){
+        return;
+    }
     node* temp = routes[b];
     routes.erase(routes.begin() + b);
     routes.insert(routes.begin()+a, temp);
 }
 
 void Solution::partialReverse(int a, int b){
+    if(a == 0 || b == 0){
+        return;
+    }
     if ( a > b){
         int temp = b;
         b = a;
@@ -65,30 +77,33 @@ int Solution::evaluate(){
     int next;
     for (int i = 0; i < routes.size(); i++){
         next = (i+1)%(routes.size()); // wraps arround at the end
-        value += sqrt(pow((routes[i]->x * routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
+        value += sqrt(pow((routes[i]->x - routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
     }
     return value;
 }
 
 bool Solution::isFeasable(int max_time, int capacity){
-    int time = 0;
+    float time = 0;
     int demand = 0;
     int next;
     for (int i = 0; i< routes.size(); i++){
         next = (i+1)%(routes.size()); // wraps arround at the end
         
-        time += sqrt(pow((routes[i]->x * routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
+        time += sqrt(pow((routes[i]->x - routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
         
         demand += routes[i]->demand;
         //each route must be smaller than max_time
         if(time > max_time){
             return false;
         }
-        //each routes demand must be smaller than C
+        //each routes demand must be smaller than Capacity
         if(demand > capacity){
             return false;
         }
-        if (routes[i]->node_id == 0){
+        if (routes[next]->node_id == 0){
+            if (debug){
+                std::cout << "(" << time << ", " << demand << ")\n";
+            }
             time = 0;
             demand = 0;
         }
@@ -96,8 +111,20 @@ bool Solution::isFeasable(int max_time, int capacity){
     return true;
 }
 void Solution::print(){
-    std::cout << value << "\n";
-    for(int i = 0; i<routes.size(); i++){
-        std::cout << routes[i]->node_id << " ";
+    int last_id = 0;
+    int route_count = 1;
+    std::cout << "shortest trip time: "<< value;
+    for(int i = 1; i<routes.size(); i++){
+        if(last_id == 0 && routes[i]->node_id != 0){
+            std::cout << "\n";
+            std::cout <<"route #" << route_count << ":  " << routes[i]->node_id << " -> ";
+            route_count++;
+        }
+        if (last_id != 0 && routes[i]->node_id != 0){
+            std::cout << routes[i]->node_id << " -> ";
+        }
+            
+        last_id = routes[i]->node_id;
+        
     }
 }

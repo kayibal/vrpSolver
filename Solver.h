@@ -13,8 +13,6 @@
 #include "Solution.h"
 
 class Solver{
-    int seed;
-
     //Johnson et al 89-91 p141
     float temp_init;
     float temp_factor;
