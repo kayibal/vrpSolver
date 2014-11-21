@@ -68,7 +68,7 @@ void Solution::partialReverse(int a, int b){
 }
 
 int Solution::getSize(){
-    return routes.size();
+    return (int)routes.size();
 }
 
 //returns total time
@@ -82,30 +82,31 @@ float Solution::evaluate(){
     return value;
 }
 
-bool Solution::isFeasable(int max_time, int capacity){
+bool Solution::isFeasable(int max_time, std::vector<int> capacity){
     float time = 0;
-    int demand = 0;
+    std::vector<float> demand(2);
+    demand[0] = 0;
+    demand[1] = 0;
     int next;
     for (int i = 0; i< routes.size(); i++){
         next = (i+1)%(routes.size()); // wraps arround at the end
         
         time += sqrt(pow((routes[i]->x - routes[next]->x),2) + pow((routes[i]->y - routes[next]->y),2))+routes[i]->time;
         
-        demand += routes[i]->demand;
+        demand[0] += routes[i]->demand[0];
+        demand[1] += routes[i]->demand[1];
         //each route must be smaller than max_time
         if(time > max_time){
             return false;
         }
         //each routes demand must be smaller than Capacity
-        if(demand > capacity){
+        if(demand[0] > capacity[0] || demand[1] > capacity[1]){
             return false;
         }
         if (routes[next]->node_id == 0){
-            if (debug){
-                std::cout << "(" << time << ", " << demand << ")\n";
-            }
             time = 0;
-            demand = 0;
+            demand[0] = 0;
+            demand[1] = 0;
         }
     }
     return true;

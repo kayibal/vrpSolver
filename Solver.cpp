@@ -27,7 +27,7 @@ std::string trim(std::string& s)
     return s;
 }
 
-Solver::Solver(int s, std::string file)
+Solver::Solver(int s, std::string file, short instance, float ti, float tf, float cuto, int sizef, int fidiv):capacity(2)
 {
     srand(s);
     max_time = INT_MAX;
@@ -35,11 +35,11 @@ Solver::Solver(int s, std::string file)
     int service_time=0;
     
     //standard values for SA
-    temp_init = 20;
-    temp_factor = 0.99;
-    cutoff = 0.2;
-    size_factor = 4;
-    find_divisor = 50;
+    temp_init = ti;
+    temp_factor = tf;
+    cutoff = cuto;
+    size_factor = sizef;
+    find_divisor = fidiv;
     
     //Read .vrs file
     ifstream f(file.c_str());
@@ -75,7 +75,14 @@ Solver::Solver(int s, std::string file)
         else if(varName=="CAPACITY")
         {
             //Set Capacity;
-            capacity = stod(varValue);
+            int c = stod(varValue);
+            if(instance == 1){
+                capacity[0] = c;
+            } else {
+                capacity[0] = 3*c/4.;
+                capacity[1] = c/4.;
+            }
+            
         }
         else if(varName=="SERVICE_TIME")
         {
@@ -94,9 +101,10 @@ Solver::Solver(int s, std::string file)
                 int id;
                 float x,y;
                 node* n = new node();
-
+                
                 f>>id>>x>>y;
-
+                
+                n->demand.resize(2);
                 n->node_id=i+1;
                 n->time=service_time;
                 n->x=x;
@@ -112,7 +120,37 @@ Solver::Solver(int s, std::string file)
                 int id;
                 int d;
                 f>>id>>d;
-                nodes[id]->demand=d;
+                if(instance == 1){
+                    nodes[id]->demand[0]=d;
+                } else if(instance == 2){
+                    if (nodes[id]->x > 0  &&
+                        nodes[id]->x < 35 &&
+                        nodes[id]->y > 0  &&
+                        nodes[id]->y < 35){
+                            //2:1
+                            nodes[id]->demand[0] = 2*d/3.;
+                            nodes[id]->demand[1] = d/3.;
+                        
+                    } else {
+                        //3:1
+                        nodes[id]->demand[0] = 3*d/4.;
+                        nodes[id]->demand[1] = d/4.;
+                    }
+                } else if(instance == 3){
+                    if (nodes[id]->x > 0  &&
+                        nodes[id]->x < 35 &&
+                        nodes[id]->y > 0  &&
+                        nodes[id]->y < 35){
+                            //2:1
+                            nodes[id]->demand[0] = 2*d/3.;
+                            nodes[id]->demand[1] = d/3.;
+                        
+                    } else {
+                        //4:1
+                        nodes[id]->demand[0] = 4*d/5.;
+                        nodes[id]->demand[1] = d/5.;
+                    }
+                }
             }
             //cout<<"DEMANDDDDDDD"<<endl;
         }
@@ -126,7 +164,9 @@ Solver::Solver(int s, std::string file)
             depot->time=0;
             depot->x=x;
             depot->y=y;
-            depot->demand=0;
+            depot->demand.resize(2);
+            depot->demand[0]=0;
+            depot->demand[1]=0;
             nodes[0]=depot;
             //cout<<"DEPOTTTTTT"<<endl;
         }
@@ -155,6 +195,7 @@ Solution Solver::visitNeighbor(){
 void Solver::start()
 {
     best = Solution(nodes);
+    init = best;
     current = best;
     float temp = temp_init;
     cout << "waiting for cooldown... \n";
@@ -192,7 +233,7 @@ void Solver::start()
             }
         }while(trials<size_factor*neighborhood_size && changes < cutoff*neighborhood_size);
         temp = temp * temp_factor;
-        //cout << temp << "\n";
+        cout << temp << "\n";
     }while(temp>(temp_init/find_divisor));
     cout << "Cold enough u can touch it! \n";
     printSolution();
@@ -201,4 +242,9 @@ void Solver::start()
 void Solver::printSolution(){
     best.print();
 }
-
+Solution Solver::getSolution(){
+    return best;
+}
+Solution Solver::getInit(){
+    return init;
+}

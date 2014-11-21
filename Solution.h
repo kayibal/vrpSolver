@@ -15,7 +15,7 @@
 typedef struct {
     int node_id;
     int time;
-    int demand;
+    std::vector<float> demand;
     double x;
     double y;
 } node;
@@ -39,7 +39,7 @@ public:
     
     float evaluate();
     int getSize();
-    bool isFeasable(int max_time, int capacity);
+    bool isFeasable(int max_time, std::vector<int> capacity);
     
     void print();
 };

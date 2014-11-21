@@ -22,16 +22,19 @@ class Solver{
     int neighborhood_size;
 
     int max_time;
-    /*std::vector<int>*/ int capacity;
+    std::vector<int> capacity;
     std::vector<node*> nodes;
+    Solution init;
     Solution best;
     Solution current;
     
     Solution visitNeighbor();
     
 public:
-    Solver(int s, std::string file);
+    Solver(int s, std::string file, short instance, float ti, float tf, float cuto, int sizef, int fidiv);
     void start();
+    Solution getSolution();
+    Solution getInit();
     void printSolution();
 };
 
