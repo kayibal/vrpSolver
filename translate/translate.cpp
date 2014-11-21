@@ -135,9 +135,9 @@ int main(int argc,char**argv)
     f.close();
     ofstream o(file_name.replace(file_name.end()-3,file_name.end(),"dat").c_str());
     o<<"data;"<<endl;
-    o<<"param n := "<<num_cities<<endl;
-    o<<"param Dmax := "<<max_time<<endl;
-    o<<"param Cmax := "<<capacity<<endl;
+    o<<"param n := "<<num_cities<<";"<<endl;
+    o<<"param Dmax := "<<max_time<<";"<<endl;
+    o<<"param Cmax := "<<capacity<<";"<<endl;
 
     //Set demans
     o<<"param : V :  c :="<<endl;
@@ -145,6 +145,7 @@ int main(int argc,char**argv)
     {
         o<<i<<" "<<demands[i]<<endl;
     }
+    o<<";"<<endl;
 
     //Set Distances
     o<<"param : E : d :="<<endl;

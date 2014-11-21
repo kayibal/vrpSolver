@@ -1,8 +1,15 @@
 data;
+<<<<<<< HEAD
 param n := 50;
 param Dmax := 2147483647;
 param Cmax := 160;
 param  c :=
+=======
+param n := 51;
+param Dmax := 2147483647;
+param Cmax := 160;
+param : V :  c :=
+>>>>>>> 59491ea9ce830d3dbd37ddc197ed099a028940d1
 0 0
 1 7
 2 30
