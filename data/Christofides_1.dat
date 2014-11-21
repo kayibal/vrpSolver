@@ -1,8 +1,8 @@
 data;
-param n := 51
-param Dmax := 2147483647
-param Cmax := 160
-param : V :  c :=
+param n := 50;
+param Dmax := 2147483647;
+param Cmax := 160;
+param  c :=
 0 0
 1 7
 2 30
@@ -54,6 +54,7 @@ param : V :  c :=
 48 17
 49 18
 50 10
+;
 param : E : d :=
 0 0 0
 0 1 13.8924
@@ -2657,7 +2658,7 @@ param : E : d :=
 50 49 12.0416
 50 50 0
 ;
-param : V : t :=
+param t :=
 0 0
 1 0
 2 0
