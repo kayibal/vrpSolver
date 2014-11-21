@@ -38,6 +38,7 @@ int main(int argc,char**argv)
     float* distance_matrix;
     point* cities;
     float* demands;
+    float* service_times;
     int max_time=INT_MAX;
     float capacity=0;
     int service_time=0;
@@ -65,6 +66,7 @@ int main(int argc,char**argv)
             //Set Dimension
             demands = new float[stoi(varValue)];
             cities = new point[stoi(varValue)];
+            service_times = new float[stoi(varValue)];
             distance_matrix = new float[stoi(varValue)*stoi(varValue)];
             num_cities = stoi(varValue);
         }
@@ -97,6 +99,7 @@ int main(int argc,char**argv)
 
                 cities[id].x=x;
                 cities[id].y=y;
+                service_times[id]=service_time;
             }
         }
         else if(varName=="DEMAND_SECTION")
@@ -117,6 +120,7 @@ int main(int argc,char**argv)
             f>>x>>y;
             cities[0].x=x;
             cities[0].y=y;
+            service_times[0]=0;
             demands[0]=0;
         }
     }
@@ -131,39 +135,36 @@ int main(int argc,char**argv)
     f.close();
     ofstream o(file_name.replace(file_name.end()-3,file_name.end(),"dat").c_str());
     o<<"data;"<<endl;
-    o<<"set max_time := "<<max_time<<endl;
-    o<<"set service_time := "<<service_time<<endl;
+    o<<"param n := "<<num_cities<<endl;
+    o<<"param Dmax := "<<max_time<<endl;
+    o<<"param Cmax := "<<capacity<<endl;
 
-    o<<"set I :=";
+    //Set demans
+    o<<"param : V :  c :="<<endl;
     for(int i=0;i<num_cities;i++)
     {
-        o<<" CITY_"<<i;
+        o<<i<<" "<<demands[i]<<endl;
     }
-    o<<";"<<endl;
 
-    o<<"set J :=";
-    for(int i=0;i<num_cities;i++)
-    {
-        o<<" CITY_"<<i;
-    }
-    o<<";"<<endl;
-
-    o<<"d :\t";
-    for(int i=0;i<num_cities;i++)
-    {
-        o<<" CITY_"<<i;
-    }
-    o<<" :="<<endl;
+    //Set Distances
+    o<<"param : E : d :="<<endl;
     for(int y=0;y<num_cities;y++)
     {
-        o<<"\t"<<"CITY_"<<y<<" ";
         for(int x=0;x<num_cities;x++)
         {
-            o<<" "<<distance_matrix[x+y*num_cities];
+            o<<y<<" "<<x<<" "<<distance_matrix[x+y*num_cities]<<endl;
         }
-        o<<endl;
     }
     o<<";"<<endl;
+
+    //Set Servie Time
+    o<<"param : V : t :="<<endl;
+    for(int i=0;i<num_cities;i++)
+    {
+         o<<i<<" "<<service_times[i]<<endl;
+    }
+    o<<";"<<endl;
+
     o<<"end;"<<endl;
     o.close();
     return 0;

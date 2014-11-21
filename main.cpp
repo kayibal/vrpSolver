@@ -15,7 +15,7 @@ int main(int argc, const char * argv[])
 {
 
     // insert code here...
-    Solver s(8132947,"/Users/Alan/Downloads/instances/Christofides_1.vrp");
+    Solver s(8132947,"../Christofides_10.vrp");
     s.start();
     return 0;
 }
